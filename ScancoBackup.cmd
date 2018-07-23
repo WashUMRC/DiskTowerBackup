@@ -1,0 +1,1 @@
+"C:\Program Files\MATLAB\R2018a\bin\matlab.exe" -nodisplay -nosplash -nodesktop -r "run('c:\users\buffa\desktop\copyScancoDataToDataTower.m');"
