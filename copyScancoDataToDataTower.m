@@ -8,6 +8,9 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 while run == 1
+
+    sysLine = fullfile(pwd,'XRMDataCopyFromN.cmd');
+    system(sysLine);
     
     clear all;clc;
     
