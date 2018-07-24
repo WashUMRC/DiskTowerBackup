@@ -6,7 +6,7 @@
 %%system as a scheduled Windows task. Still check in on it once in a while
 %%though to make sure it's running.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
+run = 1;
 while run == 1
 
     sysLine = fullfile(pwd,'XRMDataCopyFromN.cmd');
