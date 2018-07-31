@@ -45,30 +45,32 @@ end
 for i = st:lt
     out = template;
     pth = fullfile(localpath,sampleNumber);
-    pth = fullfile(pth,['000',num2str(i)]);
+    zers = '00000000';
+    pth = fullfile(pth,[zers(1:end-length(num2str(i))) num2str(i)]);
     isq = dir([pth '\*.isq']);
     if length(isq) > 0
         binary(f);
         mput(f,fullfile(pth,isq.name));
         strrep(out{1},'ISQFILENAME',fullfile(pth,isq.name));
         strrep(out{2},'SAMPLENUMBER',num2str(samp));
+        for j = 1:length(out)
+            fprintf(fileOut,'%s\n',out{j});
+        end
+        fclose(fileOut);
+        ascii(f);
+        mput(f,'microctcomfile.com');
+        plinkPath = '"C:\Program Files\PuTTY\plink.exe" ';
+        if length(num2str(samp)) == 4
+            savedSession = 'uCT40 ';
+        else
+            savedSession = 'VivaCT40';
+        end
+        userName = 'microct ';
+        password = 'mousebone4 ';
+        remoteScratch = 'IDISK1:[MICROCT.SCRATCH]';
+        sysLine = [plinkPath savedSession '-l ' userName '-pw ' password '@' remoteScratch 'microctcomfile.com'];
+        system(sysLine);
     end
-    for j = 1:length(out)
-        fprintf(fileOut,'%s\n',out{j});
-    end
-    fclose(fileOut);
-    ascii(f);
-    mput(f,'microctcomfile.com');
-    plinkPath = '"C:\Program Files\PuTTY\plink.exe" ';
-    if length(num2str(samp)) == 4
-        savedSession = 'uCT40 ';
-    else
-        savedSession = 'VivaCT40';
-    end
-    userName = 'microct ';
-    password = 'mousebone4 ';
-    remoteScratch = 'IDISK1:[MICROCT.SCRATCH]';
-    sysLine = [plinkPath savedSession '-l ' userName '-pw ' password '@' remoteScratch 'microctcomfile.com'];
-    system(sysLine);
-end
     
+end
+
