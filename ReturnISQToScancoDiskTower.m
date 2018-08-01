@@ -3,16 +3,6 @@ function ReturnISQToScancoDiskTower()
 answer = inputdlg('Please select the sample number of interest');
 sampleNumber = cell2mat(answer);
 
-if length(answer{1}) == 3
-    sampleNumber = ['00000' sampleNumber];
-    f = ftp('10.21.24.203','microct','mousebone4','System','OpenVMS');
-else
-    sampleNumber = ['0000' sampleNumber];
-    f = ftp('10.21.24.204','microct','mousebone4','System','OpenVMS');
-end
-cd(f,'dk0:');
-cd(f,'data');
-
 answer = inputdlg('Please enter the first measurement of interest');
 startMeasurement = answer{1};
 if length(answer{1}) ~= 5
@@ -29,13 +19,25 @@ if length(answer{1}) ~= 5
 end
 lastMeasurement = ['000' lastMeasurement];
 
+if length(answer{1}) == 3
+    sampleNumber = ['00000' sampleNumber];
+    f = ftp('10.21.24.203','microct','mousebone4','System','OpenVMS');
+else
+    sampleNumber = ['0000' sampleNumber];
+    f = ftp('10.21.24.204','microct','mousebone4','System','OpenVMS');
+end
+cd(f,'dk0:');
+cd(f,'data');
+
+
+
 samp = str2num(sampleNumber);
 st = str2num(startMeasurement);
 lt = str2num(lastMeasurement);
 
-template = importdata(fullfile(pwd,'IMPORT_FOREIGN_MEASUREMENT.COM'),'\t',6);
+template = importdata(fullfile(pwd,'IMPORT_FOREIGN_MEASUREMENT.COM'),'\t',7);
 fileOut = fullfile(pwd,'microctcomfile.com');
-fid = fopen(fileOut,'w');
+
 if length(num2str(samp)) == 3
     localpath = 'd:\VivaCT\';
 else
@@ -43,20 +45,24 @@ else
 end
 
 for i = st:lt
+    clc;
+    i
     out = template;
     pth = fullfile(localpath,sampleNumber);
-    zers = '00000000';
-    pth = fullfile(pth,[zers(1:end-length(num2str(i))) num2str(i)]);
-    isq = dir([pth '\*.isq']);
+    pth = fullfile(pth,['000',num2str(i)]);
+    isq = dir([pth '\*.isq*']);
     if length(isq) > 0
+        fid = fopen(fileOut,'w');
         binary(f);
         mput(f,fullfile(pth,isq.name));
-        strrep(out{1},'ISQFILENAME',fullfile(pth,isq.name));
-        strrep(out{2},'SAMPLENUMBER',num2str(samp));
+        out{1} = strrep(out{1},'ISQFILENAME',fullfile(pth,isq.name));
+        out{2} = strrep(out{2},'SAMPLENUMBER',num2str(samp));
+        out{1} = strrep(out{7},'ISQFILENAME',fullfile(pth,isq.name));
+        
         for j = 1:length(out)
-            fprintf(fileOut,'%s\n',out{j});
+            fprintf(fid,'%s\n',out{j});
         end
-        fclose(fileOut);
+        %     fclose(fileOut);
         ascii(f);
         mput(f,'microctcomfile.com');
         plinkPath = '"C:\Program Files\PuTTY\plink.exe" ';
