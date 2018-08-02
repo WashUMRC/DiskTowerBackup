@@ -61,7 +61,7 @@ while run == 1
                                     end
                                     try
                                         c = clock;
-                                        if c(4) < 8 || c(4) > 17
+                                        if c(4) <= 8 || c(4) >= 17
                                             getTheFiles(file,f,theDir);
                                         else
                                             theDir = cd(f);
@@ -137,7 +137,7 @@ while run == 1
                                         end
                                         try
                                             c = clock;
-                                        if c(4) < 8 || c(4) > 17
+                                        if c(4) <= 8 || c(4) >= 17
                                             getTheFiles(file,f,theDir);
                                         else
                                             theDir = cd(f);
