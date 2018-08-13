@@ -4,4 +4,4 @@ This set of scripts is intended to be run directly from the DiskTower computer. 
 
 mapNetworkDrives will automatically map ortho network drives if they aren't already. The username and password must be set with currently active credentials.
 
-TODO: Add a file restore template
+ReturnISQToScancoDiskTower.m is used to return data to the uCT40 or VivaCT. Start the script and follow the prompts. It will return all data for the indicated sample in the measurement range provided; currently it doesn't skip data in between the start and stop measurement numbers if they exist. They are then created as new measurement numbers sequentially under the same sample in the Scanco database system, though their scan date should be unaltered.
